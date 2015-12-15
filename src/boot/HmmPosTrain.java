@@ -20,7 +20,7 @@ public class HmmPosTrain {
 	HashMap<String, Integer> tagInFirstSent;
 	HashMap<Tuple<String, String>,Integer > s1 = null;
 	HashMap<Tuple<String, String>,Integer > s2 = null;
-
+	float numOfSentences=0;
 
 	public static void main(String[] args) {
       new HmmPosTrain("oct27.train");
@@ -38,7 +38,6 @@ public class HmmPosTrain {
 //			s1=new HashMap<Tuple<String,String>, Integer>();
 //			s2=new HashMap<Tuple<String,String>, Integer>();
 			String line1=null,line2=null;
-            float numOfSentences=0;
 			while(input.hasNextLine()){
 				line1=input.nextLine();
 			addLineToMap(line1.toLowerCase());
@@ -57,23 +56,9 @@ public class HmmPosTrain {
 				numOfSentences++;
 			}
             input.close();
-    	PrintWriter writer;
-		try {
-			writer = new PrintWriter(new FileWriter("out.txt"));
-			writer.println("SECTION1");
-			printProbabilitiesToFile(tagToTag,tagAndCount,writer);
-			writer.println("SECTION2");
-			printProbabilitiesToFile( tagToTWord, tagAndCount, writer);
-			writer.println("SECTION3");
-			for(Entry<String, Integer> en : tagInFirstSent.entrySet()){
-				writer.println(String.format("%s\t%.14f", en.getKey(),(float)(en.getValue()/numOfSentences)));
-			}
-			writer.flush();
-			writer.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	
+            printModelToFile("out.txt");
+         
 		
 		
 		} catch (FileNotFoundException e) {
@@ -82,6 +67,24 @@ public class HmmPosTrain {
 		}
 
 	}
+    private void printModelToFile(String fileName){
+    	   PrintWriter writer;
+   		try {
+   			writer = new PrintWriter(new FileWriter(fileName));
+   			writer.println("SECTION1");
+   			printProbabilitiesToFile(tagToTag,tagAndCount,writer);
+   			writer.println("SECTION2");
+   			printProbabilitiesToFile( tagToTWord, tagAndCount, writer);
+   			writer.println("SECTION3");
+   			for(Entry<String, Integer> en : tagInFirstSent.entrySet()){
+   				writer.println(String.format("%s\t%.14f", en.getKey(),(float)(en.getValue()/numOfSentences)));
+   			}
+   			writer.flush();
+   			writer.close();
+   		} catch (IOException e) {
+   			e.printStackTrace();
+   		}
+    }
     private void addLineToMap(String line){
     	String[] wordAndTag=null;
     	wordAndTag=line.split("\t");
