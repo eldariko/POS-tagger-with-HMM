@@ -23,12 +23,16 @@ public class HmmPosTrain {
 	float numOfSentences=0;
 
 	public static void main(String[] args) {
-      new HmmPosTrain("oct27.train");
-	}
+		if(args.length==4){
+		new HmmPosTrain(args[1],args[3]);
+		}else {System.err.println("no valid input . please type according to This structure -  "
+	    		+ "train <training.txt> -output <model.txt>");
+	    }
+		}
 	
-    public HmmPosTrain(String inputCorpusFile){
+    public HmmPosTrain(String trainingFile,String modelFile){
 		try {
-			Scanner input=new Scanner(new BufferedReader(new FileReader(inputCorpusFile)));
+			Scanner input=new Scanner(new BufferedReader(new FileReader(trainingFile)));
 //			input.useDelimiter("[\r\n]");
 			tagToTag=new LinkedHashMap<String, Integer>();
 			tagToTWord=new LinkedHashMap<String, Integer>();
@@ -49,17 +53,16 @@ public class HmmPosTrain {
 					addToMap(tagToTag,line1.split("\t")[1].toLowerCase()+"\t"+line2.split("\t")[1].toLowerCase());
 					
 				}
-				System.out.println("line1:"+line1);
-				System.out.println("line2:"+line2);
+				
 			}
-				System.out.println();
 				numOfSentences++;
 			}
             input.close();
     	
-            printModelToFile("out.txt");
+            printModelToFile(modelFile);
          
-		
+            System.out.println("task complete !");
+
 		
 		} catch (FileNotFoundException e) {
 			
