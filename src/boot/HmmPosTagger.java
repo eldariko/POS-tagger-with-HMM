@@ -1,18 +1,17 @@
 package boot;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class hmmPosTagger {
+public class HmmPosTagger {
 
 	public static void main(String[] args) {
-		
+	if(args.length==2){	
+		System.out.println(args[1]);
 		List<Character> mysclass = new ArrayList<Character>();
 		List<Integer> mysclass2 = new ArrayList<Integer>();
 		List<String> mysclass3 = new ArrayList<String>();
@@ -30,11 +29,9 @@ public class hmmPosTagger {
 		
 		BufferedReader br =null;
 		BufferedReader brTest=null;
-		BufferedWriter bw ;
 		int num;
 		int sum=0;
 		int counter=0;
-		int counter_tags=0;
 		char A;
 		String word="";
 		int index=0;
@@ -45,7 +42,7 @@ public class hmmPosTagger {
 			String sCurrentLine;
 			
 			br = new BufferedReader(new FileReader("oct27.train"));
-			bw = new BufferedWriter(new FileWriter("model.txt")); 
+//			new BufferedWriter(new FileWriter("model2.txt")); 
 			{
 			while ((sCurrentLine = br.readLine()) != null) {
 				
@@ -169,12 +166,11 @@ public class hmmPosTagger {
 			double maxstart=0;
 			double max=0;
 			double sumStart;
-			char startTag=' ';
 			double sumTag;
 			boolean foundStart=false;
 			boolean found=false;
 			
-			brTest = new BufferedReader(new FileReader("oct27.test"));
+			brTest = new BufferedReader(new FileReader(args[1]));
 
 			while ((sCurrentLine = brTest.readLine()) != null) {
 				
@@ -252,7 +248,7 @@ public class hmmPosTagger {
 							}
 							if (found)
 							{
-								taggerChar.add(mysclass8.get(index));
+								taggerChar.add(mysclass.get(index));
 								taggerPro.add(max);
 								max=0;
 								word="";
@@ -271,21 +267,24 @@ public class hmmPosTagger {
 								
 					{
 			}
+				
 					
-					for (int i=0; i<taggerChar.size();i++)
-					{
-						if ((i+1)<taggerChar.size())
-							if(taggerPro.get(i)>taggerPro.get(i+1))
-								System.out.println(taggerChar.get(i)+" "+taggerPro.get(i)); 
-							else
-							{	
-								System.out.println(taggerChar.get(i)+" "+taggerPro.get(i)); 
-								System.out.println();
-							}
-						else
-							System.out.println(taggerChar.get(i)+" "+taggerPro.get(i)); 
-					}
+					
 		}
+			for (int i=0; i<taggerChar.size();i++)
+			{
+				if ((i+1)<taggerChar.size())
+					if(taggerPro.get(i)>taggerPro.get(i+1))
+						System.out.println(taggerChar.get(i)+" "+taggerPro.get(i)); 
+					else
+					{	
+						System.out.println(taggerChar.get(i)+" "+taggerPro.get(i)); 
+						System.out.println();
+					}
+				else
+					System.out.println(taggerChar.get(i)+" "+taggerPro.get(i)); 
+			}		
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -296,10 +295,12 @@ public class hmmPosTagger {
 			}
 		}
 
-			
+		
 
-	}
+	}else {System.err.println("no valid input . please type according to This structure - testFile <test.txt>(example)");}
 }
 		
+}
+	
 
 
